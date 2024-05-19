@@ -20,6 +20,13 @@
 	</properties>
 	<dependencies>
 
+		<!-- openCSV -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.5.2</version> <!-- 버전 명확히 지정 -->
+		</dependency>
+
 		<!-- 파일 업로드를 위한 -->
 		<dependency>
 			<groupId>com.google.guava</groupId>

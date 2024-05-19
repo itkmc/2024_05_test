@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.example.demo.vo.Article;
+import com.example.demo.vo.City;
+import com.example.demo.vo.QnA;
 
 @Mapper
 public interface ArticleRepository {
@@ -210,5 +212,40 @@ public interface ArticleRepository {
 			FROM article
 			""")
 	public int getCurrentArticleId();
+	
+	@Select("""
+			<script>
+			SELECT *
+			FROM city2
+			WHERE 1
+			<if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKeywordTypeCode == 'cityName'">
+						AND cityName LIKE CONCAT('%',#{searchKeyword},'%')
+					</when>
+					<when test="searchKeywordTypeCode == 'subName'">
+						AND subName LIKE CONCAT('%',#{searchKeyword},'%')
+					</when>
+					<otherwise>
+						AND cityName LIKE CONCAT('%',#{searchKeyword},'%')
+						OR subName LIKE CONCAT('%',#{searchKeyword},'%')
+					</otherwise>
+				</choose>
+			</if>
+			ORDER BY id
+			</script>
+			""")
+	
+	public List<City> getForPrintcitys(String searchKeywordTypeCode, String searchKeyword);
+	
+	
+	@Select("""
+			<script>
+			SELECT * 
+			FROM qna 
+			WHERE question LIKE CONCAT('%', #{searchKeyword}, '%');
+			</script>
+			""")
+	public List<QnA> getForQnAs(String searchKeywordTypeCode, String searchKeyword);
 
 }

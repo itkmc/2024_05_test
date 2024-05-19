@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.repository.ArticleRepository;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.City;
+import com.example.demo.vo.QnA;
 import com.example.demo.vo.ResultData;
 
 @Service
@@ -169,6 +171,18 @@ public class ArticleService {
 	public int getCurrentArticleId() {
 		return articleRepository.getCurrentArticleId();
 		
+	}
+	
+	
+	//전북지역 관광지 정보 가져오기.
+	public List<City> getForPrintcitys(String searchKeywordTypeCode, String searchKeyword) {
+		return articleRepository.getForPrintcitys(searchKeywordTypeCode, searchKeyword);
+	}
+	
+	//예상질문 가져오기
+	public List<QnA> getForQnAs(String searchKeywordTypeCode, String searchKeyword) {
+		// TODO Auto-generated method stub
+		return articleRepository.getForQnAs(searchKeywordTypeCode, searchKeyword);
 	}
 
 }
