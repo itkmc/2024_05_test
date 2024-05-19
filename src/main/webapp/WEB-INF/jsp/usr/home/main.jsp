@@ -32,7 +32,7 @@
         <div class="qna_list">
             <h2>Q&A 목록</h2>
             <ul>
-                <c:forEach var="qna" items="${Qnas}">
+                <c:forEach var="qna" items="${QnAs}">
                     <c:if test="${fn:containsIgnoreCase(qna.question, searchKeyword) || fn:containsIgnoreCase(qna.answer, searchKeyword)}">
                        	<li>질문: ${qna.question}<br>답변: ${qna.answer}</li>
                     </c:if>
@@ -73,50 +73,52 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            var apiKey = '57f7f1899a50b5e3d375cf64fdce856e';
-            var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+    $(document).ready(function () {
+        var apiKey = '57f7f1899a50b5e3d375cf64fdce856e';
+        var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
-            var cityNames = {
-                '대전': 'Daejeon',
-                '서울': 'Seoul',
-                '부산': 'Busan',
-                '인천': 'Incheon',
-                '대구': 'Daegu',
-                '전주': 'Jeonju',
-                '군산': 'Gunsan',
-                '익산': 'Iksan',
-                '남원': 'Namwon',
-                '김제': 'Gimje',
-                '완주': 'Wanju',
-                '무주': 'Muju',
-                '장수': 'Jangsu',
-                '임실': 'Imsil',
-                '순창': 'Sunchang',
-                '고창': 'Gochang',
-                '부안': 'Buan',
-                '광주': 'Gwangju'
+        var cityNames = {
+            '대전': 'Daejeon',
+            '서울': 'Seoul',
+            '부산': 'Busan',
+            '인천': 'Incheon',
+            '대구': 'Daegu',
+            '전주': 'Jeonju',
+            '군산': 'Gunsan',
+            '익산': 'Iksan',
+            '남원': 'Namwon',
+            '김제': 'Gimje',
+            '완주': 'Wanju',
+            '무주': 'Muju',
+            '장수': 'Jangsu',
+            '임실': 'Imsil',
+            '순창': 'Sunchang',
+            '고창': 'Gochang',
+            '부안': 'Buan',
+            '광주': 'Gwangju'
+        };
+		
+        var englishToKoreanCityNames = {};
+        for (var key in cityNames) {
+            englishToKoreanCityNames[cityNames[key]] = key;
+        }
+        
+        function getWeather(cityName) {
+            var cityNameInEnglish = cityNames[cityName] || cityName; // 도시 이름 영어로 변환
+            var params = {
+                q: cityNameInEnglish,
+                appid: apiKey,
+                units: 'metric',
+                lang: 'kr'
             };
 
-            var englishToKoreanCityNames = {};
-            for (var key in cityNames) {
-                englishToKoreanCityNames[cityNames[key]] = key;
-            }
-
-            function getWeather(cityName) {
-                var cityNameInEnglish = cityNames[cityName] || cityName;
-                var params = {
-                    q: cityNameInEnglish,
-                    appid: apiKey,
-                    units: 'metric',
-                    lang: 'kr'
-                };
-
-                $.ajax({
-                    url: weatherApiUrl,
-                    data: params,
-                    dataType: 'json',
-                    success: function (data) {
+            $.ajax({
+                url: weatherApiUrl,
+                data: params,
+                dataType: 'json',
+                success: function (data) {
+                    // API에서 반환된 데이터 확인
+                    if (data && data.weather && data.weather.length > 0) {
                         var weatherIcon = data.weather[0].icon;
                         var iconUrl = 'http://openweathermap.org/img/wn/' + weatherIcon + '.png';
                         $('.weather-icon').html('<img src="' + iconUrl + '">');
@@ -127,25 +129,28 @@
                         var cityNameInEnglish = data.name;
                         var cityNameInKorean = englishToKoreanCityNames[cityNameInEnglish] || cityNameInEnglish;
                         $('.city').text('지역: ' + cityNameInKorean);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('날씨 데이터 가져오기 오류:', error);
+                    } else {
+                        console.error('날씨 데이터 가져오기 오류: 잘못된 데이터 형식');
                     }
-                });
-            }
-
-            // 상세 정보 버튼 클릭 시
-            $('.show-details').on('click', function () {
-                var cityNo = $(this).data('city-id');
-                $('.city-details').hide();
-                $('#city-details-' + cityNo).show();
-                $('.qna_list').hide();
-
-                var cityName = $('#city-details-' + cityNo + ' h3').text().replace('의 세부 정보', '').trim();
-                getWeather(cityName);
+                },
+                error: function (xhr, status, error) {
+                    console.error('날씨 데이터 가져오기 오류:', error);
+                }
             });
+        }
 
+        // 상세 정보 버튼 클릭 시
+        $('.show-details').on('click', function () {
+            var cityNo = $(this).data('city-id');
+            $('.city-details').hide();
+            $('#city-details-' + cityNo).show();
+            $('.qna_list').hide();
+
+            var cityName = $('#city-details-' + cityNo + ' h3').text().replace('의 세부 정보', '').trim();
+            getWeather(cityName);
         });
+
+    });
     </script>
 </body>
 <style>
@@ -173,7 +178,7 @@
         font-size: 16px;
         border-radius: 32px;
         transform: translate(-50%, -50%);
-        background-color: orange;
+        background-color: rgb(96, 241, 28);
         z-index: 5;
     }
 
@@ -184,7 +189,7 @@
         margin-left: 600px;
         font-size: 16px;
         border-radius: 30px;
-        background-color: orange;
+        background-color: rgb(96, 241, 28);
         z-index: 6;
     }
 

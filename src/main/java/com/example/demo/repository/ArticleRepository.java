@@ -240,11 +240,9 @@ public interface ArticleRepository {
 	
 	
 	@Select("""
-			<script>
 			SELECT * 
 			FROM qna 
 			WHERE question LIKE CONCAT('%', #{searchKeyword}, '%');
-			</script>
 			""")
 	public List<QnA> getForQnAs(String searchKeywordTypeCode, String searchKeyword);
 

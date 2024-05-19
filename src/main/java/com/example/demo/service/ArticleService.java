@@ -181,7 +181,6 @@ public class ArticleService {
 	
 	//예상질문 가져오기
 	public List<QnA> getForQnAs(String searchKeywordTypeCode, String searchKeyword) {
-		// TODO Auto-generated method stub
 		return articleRepository.getForQnAs(searchKeywordTypeCode, searchKeyword);
 	}
 

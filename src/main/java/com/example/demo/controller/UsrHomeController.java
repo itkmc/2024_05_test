@@ -43,11 +43,4 @@ public class UsrHomeController {
 		return "redirect:/usr/home/main";
 	}
 
-	@RequestMapping("/usr/crawl")
-	public String doCrawl() {
-
-		crawlTest.crawl();
-
-		return "redirect:/usr/home/main";
-	}
 }
